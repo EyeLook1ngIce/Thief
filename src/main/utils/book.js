@@ -13,7 +13,8 @@ export default {
             start: 0,
             end: this.page_size,
             filePath: "",
-            errCode: false
+            errCode: false,
+            text: ''
         };
     },
     getSize(text) {
@@ -92,12 +93,15 @@ export default {
                 this.page_size = db.get("page_size");
             }
         }
+        this.text = this.readFile()
+        this.getSize(this.text)
     },
     soText(so) {
-        this.init();
+        if(this.filePath !== db.get("current_file_path")){
+            this.init();
+        }
         // 小说搜索
-        let text = this.readFile();
-        this.getSize(text);
+        let text = this.text;
 
         // 存储搜索结果
         var soResult = [];
@@ -139,23 +143,26 @@ export default {
         }
     },
     getPreviousPage() {
-        this.init();
-        let text = this.readFile();
-        this.getSize(text);
+        if(this.filePath !== db.get("current_file_path")){
+            this.init();
+        }
+        let text = this.text;
         this.getPage("previous");
         return this.makePage(text);
     },
     getNextPage() {
-        this.init();
-        let text = this.readFile();
-        this.getSize(text);
+        if(this.filePath !== db.get("current_file_path")){
+            this.init();
+        }
+        let text = this.text;
         this.getPage("next");
         return this.makePage(text);
     },
     getJumpingPage() {
-        this.init();
-        let text = this.readFile();
-        this.getSize(text);
+        if(this.filePath !== db.get("current_file_path")){
+            this.init();
+        }
+        let text = this.text;
         this.getPage("curr");
         return this.makePage(text);
     }
